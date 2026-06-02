@@ -1,15 +1,13 @@
-import { Link } from 'react-router';
-import './header.css';
+import { Link } from "react-router";
+import "./Header.css";
 
 export function Header() {
   return (
     <div className="header">
       <div className="left-section">
         <Link to="/" className="header-link">
-          <img className="logo"
-            src="images/logo-white.png" />
-          <img className="mobile-logo"
-            src="images/mobile-logo-white.png" />
+          <img className="logo" src="images/logo-white.png" />
+          <img className="mobile-logo" src="images/mobile-logo-white.png" />
         </Link>
       </div>
 
@@ -23,7 +21,6 @@ export function Header() {
 
       <div className="right-section">
         <Link className="orders-link header-link" to="/orders">
-
           <span className="orders-text">Orders</span>
         </Link>
 
