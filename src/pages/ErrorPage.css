@@ -1,0 +1,38 @@
+.error-page {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.home-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+
+  background-color: rgb(8, 79, 45);
+  color: white;
+
+  text-decoration: none;
+  border-radius: 8px;
+
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.home-link:hover {
+  background-color: rgb(11, 102, 58);
+  transform: translateY(-2px);
+}
+
+.home-link:active {
+  background-color: rgb(6, 65, 37);
+  transform: translateY(0);
+}
+
+.home-link:focus-visible {
+  outline: 3px solid rgb(46, 164, 79);
+  outline-offset: 3px;
+}
