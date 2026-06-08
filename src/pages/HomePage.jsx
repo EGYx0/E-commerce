@@ -6,6 +6,7 @@ import "./HomePage.css";
 
 export function HomePage() {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -16,17 +17,28 @@ export function HomePage() {
         console.error("Failed to fetch products:", error);
       }
     }
+    async function loadCartItems() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/cart-items",
+        );
+        const data = response.data;
+        setCart(data);
+      } catch (error) {
+        console.log("Failed to fetch cart Items", error);
+      }
+    }
 
     loadProducts();
+    loadCartItems();
   }, []);
-
   return (
     <>
       <link rel="icon" type="image/svg+xml" href="/home-favicon.png" />
 
       <title>Ecommerce Project</title>
 
-      <Header />
+      <Header cart={cart} />
 
       <div className="home-page">
         <div className="products-grid">
