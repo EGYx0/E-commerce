@@ -1,8 +1,25 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Header } from "../components/Header";
-import "./HomePage.css";
 import checkMark from "../assets/images/icons/checkmark.png";
-import { products } from "../../starting-code/data/products.js";
+import "./HomePage.css";
+
 export function HomePage() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const response = await axios.get("http://localhost:3000/api/products");
+        const data = response.data;
+        setProducts(data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
   return (
     <>
       <link rel="icon" type="image/svg+xml" href="/home-favicon.png" />
