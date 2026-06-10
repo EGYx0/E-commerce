@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Header } from "../components/Header";
+import { formatMoney } from "../utils/money";
 import checkMark from "../assets/images/icons/checkmark.png";
 import "./HomePage.css";
 
-export function HomePage() {
+export function HomePage({ cart }) {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
   useEffect(() => {
     async function loadProducts() {
       try {
@@ -17,19 +17,9 @@ export function HomePage() {
         console.error("Failed to fetch products:", error);
       }
     }
-    async function loadCartItems() {
-      try {
-        const response = await axios.get("/api/cart-items");
-        const data = response.data;
-        setCart(data);
-      } catch (error) {
-        console.log("Failed to fetch cart Items", error);
-      }
-    }
-
     loadProducts();
-    loadCartItems();
   }, []);
+
   return (
     <>
       <link rel="icon" type="image/svg+xml" href="/home-favicon.png" />
@@ -62,7 +52,7 @@ export function HomePage() {
               </div>
 
               <div className="product-price">
-                ${(product.priceCents / 100).toFixed(2)}
+                {formatMoney(product.priceCents)}
               </div>
 
               <div className="product-quantity-container">
