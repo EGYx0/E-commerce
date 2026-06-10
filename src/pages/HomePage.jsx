@@ -10,7 +10,7 @@ export function HomePage() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const response = await axios.get("http://localhost:3000/api/products");
+        const response = await axios.get("/api/products");
         const data = response.data;
         setProducts(data);
       } catch (error) {
@@ -19,9 +19,7 @@ export function HomePage() {
     }
     async function loadCartItems() {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/cart-items",
-        );
+        const response = await axios.get("/api/cart-items");
         const data = response.data;
         setCart(data);
       } catch (error) {
