@@ -1,7 +1,29 @@
-import "./TrackingPage.css";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
+import axios from "axios";
+import dayjs from "dayjs";
 import { Header } from "../components/Header";
-import { Link } from "react-router";
+import "./TrackingPage.css";
+
 export function TrackingPage({ cart }) {
+  const [order, setOrder] = useState(null);
+  const { orderId, productId } = useParams();
+
+  useEffect(() => {
+    async function loadTrackingOrder() {
+      let response = await axios.get(`/api/orders/${orderId}?expand=products`);
+      setOrder(response.data);
+    }
+    loadTrackingOrder();
+  }, [orderId]);
+  if (!order) {
+    return <div>Loading...</div>;
+  }
+  let filteredProduct = null;
+  filteredProduct = order.products.find((orderProduct) => {
+    return orderProduct.productId === productId;
+  });
+
   return (
     <>
       <link rel="icon" type="image/svg+xml" href="/tracking-favicon.png" />
@@ -14,19 +36,17 @@ export function TrackingPage({ cart }) {
             View all orders
           </Link>
 
-          <div className="delivery-date">Arriving on Monday, June 13</div>
-
-          <div className="product-info">
-            Black and Gray Athletic Cotton Socks - 6 Pairs
+          <div className="delivery-date">
+            Arriving on{" "}
+            {dayjs(filteredProduct.estimatedDeliveryTimeMs).format(
+              "dddd, MMMM D",
+            )}
           </div>
-
-          <div className="product-info">Quantity: 1</div>
-
-          <img
-            className="product-image"
-            src="images/products/athletic-cotton-socks-6-pairs.jpg"
-          />
-
+          <div className="product-info">{filteredProduct.product.name}</div>
+          <div className="product-info">
+            Quantity: {filteredProduct.quantity}
+          </div>
+          <img className="product-image" src={filteredProduct.product.image} />
           <div className="progress-labels-container">
             <div className="progress-label">Preparing</div>
             <div className="progress-label current-status">Shipped</div>

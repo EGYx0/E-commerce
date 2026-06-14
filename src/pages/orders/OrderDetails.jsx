@@ -1,23 +1,26 @@
 import { Fragment } from "react";
+import { Link } from "react-router";
 import dayjs from "dayjs";
 import buyAgain from "../../assets/images/icons/buy-again.png";
 export function OrderDetails({ order }) {
   return (
     <div className="order-details-grid">
-      {order.products.map((item) => {
+      {order.products.map((orderProduct) => {
         return (
-          <Fragment key={item.id}>
+          <Fragment key={orderProduct.id}>
             <div className="product-image-container">
-              <img src={item.product.image} />
+              <img src={orderProduct.product.image} />
             </div>
 
             <div className="product-details">
-              <div className="product-name">{item.product.name}</div>
+              <div className="product-name">{orderProduct.product.name}</div>
               <div className="product-delivery-date">
                 Arriving on:{" "}
-                {dayjs(item.estimatedDeliveryTimeMs).format("MMMM D")}
+                {dayjs(orderProduct.estimatedDeliveryTimeMs).format("MMMM D")}
               </div>
-              <div className="product-quantity">Quantity: {item.quantity}</div>
+              <div className="product-quantity">
+                Quantity: {orderProduct.quantity}
+              </div>
               <button className="buy-again-button button-primary">
                 <img className="buy-again-icon" src={buyAgain} />
                 <span className="buy-again-message">Add to Cart</span>
@@ -25,11 +28,11 @@ export function OrderDetails({ order }) {
             </div>
 
             <div className="product-actions">
-              <a href="/tracking">
+              <Link to={`/tracking/${order.id}/${orderProduct.product.id}`}>
                 <button className="track-package-button button-secondary">
                   Track package
                 </button>
-              </a>
+              </Link>
             </div>
           </Fragment>
         );
