@@ -36,6 +36,7 @@ export function Product({ product, loadCart }) {
 
       <div className="product-quantity-container">
         <select
+          value={cartQuantity}
           onChange={(event) => {
             setCartQuantity(Number(event.target.value));
           }}
