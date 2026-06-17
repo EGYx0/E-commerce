@@ -4,13 +4,21 @@ import { formatMoney } from "../../utils/money";
 import checkMark from "../../assets/images/icons/checkmark.png";
 export function Product({ product, loadCart }) {
   const [cartQuantity, setCartQuantity] = useState(1);
-
+  const [showAddedMessage, setShowAddedMessage] = useState(false);
   async function addToCart() {
-    await axios.post("/api/cart-items", {
-      productId: product.id,
-      quantity: cartQuantity,
-    });
-    await loadCart();
+    try {
+      await axios.post("/api/cart-items", {
+        productId: product.id,
+        quantity: cartQuantity,
+      });
+      await loadCart();
+      setShowAddedMessage(true);
+      setTimeout(() => {
+        setShowAddedMessage(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Request failed:", error.message);
+    }
   }
 
   return (
@@ -56,7 +64,10 @@ export function Product({ product, loadCart }) {
 
       <div className="product-spacer"></div>
 
-      <div className="added-to-cart">
+      <div
+        className="added-to-cart"
+        style={{ opacity: showAddedMessage ? 1 : 0 }}
+      >
         <img src={checkMark} />
         Added
       </div>
