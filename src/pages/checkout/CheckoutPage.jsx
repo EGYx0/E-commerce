@@ -15,11 +15,15 @@ export function CheckoutPage({ cart, loadCart }) {
       );
       setDeliveryOptions(response.data);
     }
+
+    loadDeliveryOptions();
+  }, []);
+
+  useEffect(() => {
     async function loadPaymentSummary() {
       const response = await axios.get("/api/payment-summary");
       setPaymentSummary(response.data);
     }
-    loadDeliveryOptions();
     loadPaymentSummary();
   }, [cart]);
 
