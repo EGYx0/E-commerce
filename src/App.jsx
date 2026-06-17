@@ -10,22 +10,22 @@ import "./App.css";
 
 function App() {
   const [cart, setCart] = useState([]);
-  useEffect(() => {
-    async function loadCartItems() {
-      try {
-        const response = await axios.get("/api/cart-items?expand=product");
-        const data = response.data;
-        setCart(data);
-      } catch (error) {
-        console.log("Failed to fetch cart Items", error);
-      }
+  async function loadCart() {
+    try {
+      const response = await axios.get("/api/cart-items?expand=product");
+      const data = response.data;
+      setCart(data);
+    } catch (error) {
+      console.log("Failed to fetch cart Items", error);
     }
-    loadCartItems();
+  }
+  useEffect(() => {
+    loadCart();
   }, []);
   return (
     <>
       <Routes>
-        <Route index element={<HomePage cart={cart} />} />
+        <Route index element={<HomePage cart={cart} loadCart={loadCart} />} />
         <Route path="checkout" element={<CheckoutPage cart={cart} />} />
         <Route path="orders" element={<OrdersPage cart={cart} />} />
         <Route
