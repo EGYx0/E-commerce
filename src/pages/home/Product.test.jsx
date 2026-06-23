@@ -14,6 +14,7 @@ vi.mock("axios"); // we can mock any npm package, when we import it above and ma
 describe("Product component", () => {
   let product;
   let loadCart;
+  let user;
   beforeEach(() => {
     product = {
       id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -33,6 +34,8 @@ describe("Product component", () => {
       keywords: ["socks", "sports", "apparel"],
     };
     loadCart = vi.fn();
+
+    user = userEvent.setup();
   });
   it("displays the product details correctly", () => {
     render(<Product product={product} loadCart={loadCart} />);
@@ -56,7 +59,7 @@ describe("Product component", () => {
   it("behaves correctly when interactions", async () => {
     render(<Product product={product} loadCart={loadCart} />);
     const addToCartButton = screen.getByTestId("add-to-cart-button");
-    const user = userEvent.setup();
+
     await user.click(addToCartButton); // this basically check when we click add to cart, then we expect that axios.post runs and loadCart and give them values if exists like axios.post
     expect(axios.post).toHaveBeenCalledWith("/api/cart-items", {
       productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -65,9 +68,19 @@ describe("Product component", () => {
     expect(loadCart).toHaveBeenCalled();
   });
 
-  it("selects a quantity", () => {
+  it("selects a quantity", async () => {
     render(<Product product={product} loadCart={loadCart} />);
     const quantitySelector = screen.getByTestId("product-quantity-selector");
     expect(quantitySelector).toHaveValue("1");
+    await user.selectOptions(quantitySelector, "3");
+    expect(quantitySelector).toHaveValue("3");
+
+    const addTocartButton = screen.getByTestId("add-to-cart-button");
+    await user.click(addTocartButton);
+    expect(axios.post).toHaveBeenCalledWith("/api/cart-items", {
+      productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+      quantity: 3,
+    });
+    expect(loadCart).toHaveBeenCalled();
   });
 });
