@@ -74,4 +74,20 @@ describe("Header Component", () => {
     await user.click(orderLink);
     expect(screen.getByTestId("location")).toHaveTextContent("/orders");
   });
+
+  it("navigates to the checkout page when the Cart link is clicked", async () => {
+    const LocationDisplay = () => {
+      const location = useLocation();
+      return <div data-testid="location">{location.pathname}</div>;
+    };
+    render(
+      <MemoryRouter>
+        <Header cart={cart} />
+        <LocationDisplay />
+      </MemoryRouter>,
+    );
+    const orderLink = screen.getByRole("link", { name: /cart/i });
+    await user.click(orderLink);
+    expect(screen.getByTestId("location")).toHaveTextContent("/checkout");
+  });
 });
