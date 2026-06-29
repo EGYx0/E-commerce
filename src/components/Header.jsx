@@ -51,7 +51,9 @@ export function Header({ cart }) {
 
         <NavLink className="cart-link header-link" to="/checkout">
           <img className="cart-icon" src={cartIcon} />
-          <div className="cart-quantity">{totalQuantity}</div>
+          <div className="cart-quantity" data-testid="cart-quantity">
+            {totalQuantity}
+          </div>
           <div className="cart-text">Cart</div>
         </NavLink>
       </div>
