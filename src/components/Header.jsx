@@ -33,13 +33,19 @@ export function Header({ cart }) {
       <div className="middle-section">
         <input
           className="search-bar"
+          aria-label="search-bar"
+          data-testid="search-bar"
           type="text"
           placeholder="Search"
           value={search}
           onChange={updateSearchInput}
         />
 
-        <button className="search-button" onClick={searchProducts}>
+        <button
+          className="search-button"
+          aria-label="search-button"
+          onClick={searchProducts}
+        >
           <img className="search-icon" src={searchIcon} />
         </button>
       </div>

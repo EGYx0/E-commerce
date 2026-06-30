@@ -90,4 +90,80 @@ describe("Header Component", () => {
     await user.click(orderLink);
     expect(screen.getByTestId("location")).toHaveTextContent("/checkout");
   });
+
+  it("initializes the search input from the URL", () => {
+    const query = "basketball";
+    render(
+      <MemoryRouter initialEntries={[`/?search=${query}`]}>
+        <Header cart={cart} />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId("search-bar")).toHaveValue(query);
+  });
+
+  it("updates the search input value when typing", async () => {
+    render(
+      <MemoryRouter>
+        <Header cart={cart} />
+      </MemoryRouter>,
+    );
+
+    const searchInput = screen.getByRole("textbox", {
+      name: /search-bar/i,
+    });
+
+    const query = "Intermediate Size Basketball";
+
+    await user.type(searchInput, query);
+
+    expect(searchInput).toHaveValue(query);
+  });
+
+  it("navigates to the search URL when the search button is clicked", async () => {
+    const LocationDisplay = () => {
+      const location = useLocation();
+
+      return (
+        <div data-testid="location">
+          {location.pathname}
+          {location.search}
+        </div>
+      );
+    };
+    render(
+      <MemoryRouter>
+        <Header cart={cart} />
+        <LocationDisplay />
+      </MemoryRouter>,
+    );
+
+    const searchInput = screen.getByRole("textbox", { name: /search-bar/i });
+    const searchButton = screen.getByRole("button", {
+      name: /search-button/i,
+    });
+    const query = "basketball";
+
+    await user.type(searchInput, query);
+    await user.click(searchButton);
+    expect(screen.getByTestId("location")).toHaveTextContent("basketball");
+  });
+
+  it("clears the search input after clicking the Search button", async () => {
+    render(
+      <MemoryRouter>
+        <Header cart={cart} />
+      </MemoryRouter>,
+    );
+
+    const searchInput = screen.getByTestId("search-bar");
+    const searchButton = screen.getByRole("button");
+
+    await user.type(searchInput, "basketball");
+
+    expect(searchInput).toHaveValue("basketball");
+
+    await user.click(searchButton);
+
+    expect(searchInput).toHaveValue("");
+  });
 });
